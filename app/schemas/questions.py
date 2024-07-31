@@ -1,4 +1,5 @@
 from datetime import datetime
+from uuid import UUID
 from pydantic import BaseModel, ConfigDict
 
 from ..utils.enums import DriverLicense
@@ -30,7 +31,7 @@ class ITopicList(ITopicAdd):
 
 
 class ITopicDetail(ITopicList, TimeStampMixin):
-    pass
+    questions: list["IQuestionList"] = []
 
 
 # Question Schema
@@ -47,6 +48,8 @@ class IQuestionAdd(BaseModel):
     answer_5: str | None = None
     has_image: bool = False
 
+    model_config = ConfigDict(from_attributes=True)
+
 
 class IQuestionUpdate(IQuestionAdd):
     topic_id: int | None = None
@@ -61,4 +64,27 @@ class IQuestionList(IQuestionAdd):
 
 
 class IQuestionDetail(IQuestionList, TimeStampMixin):
+    images: list["IQuestionImageList"] = []
+
+
+# Question Image Schema
+
+
+class IQuestionImageAdd(BaseModel):
+    question_id: int
+    topic_id: int
+    image: str
+
+
+class IQuestionImageUpdate(IQuestionImageAdd):
+    question_id: int | None = None
+    topic_id: int | None = None
+    image: str | None = None
+
+
+class IQuestionImageList(IQuestionImageAdd):
+    id: UUID
+
+
+class IQuestionImageDetail(IQuestionImageList, TimeStampMixin):
     pass

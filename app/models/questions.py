@@ -35,7 +35,7 @@ class Question(CommonIntMixin, BaseTable):
     answer_5: Mapped[str | None]
 
     has_image: Mapped[bool] = mapped_column(default=False)
-    # images: Mapped[list["QuestionImage"]] = relationship()
+    images: Mapped[list["QuestionImage"]] = relationship()
 
 
 class QuestionImage(CommonUUIDMixin, BaseTable):
