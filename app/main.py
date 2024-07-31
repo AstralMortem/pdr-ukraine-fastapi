@@ -10,7 +10,7 @@ logging.basicConfig(
 )
 
 
-app = FastAPI(title=settings.project_name)
+app = FastAPI(title=settings.PROJECT_NAME)
 
 
 for router in routers_list:

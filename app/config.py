@@ -1,29 +1,48 @@
 import os
 from pathlib import Path
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+BASE_DIR = Path(__file__).parent
+PROJECT_DIR = BASE_DIR.parent
+DOTENV = PROJECT_DIR / ".env"
+
+
+class DatabaseSettings(BaseSettings):
+    model_config = SettingsConfigDict(env_file=DOTENV, extra="ignore")
+    DB_HOST: str
+    DB_PORT: int
+    DB_NAME: str
+    DB_USER: str
+    DB_PASS: str
 
 
 class Settings(BaseSettings):
-    # PATH SETTINGS
-    PROJECT_DIR: Path = Path.cwd()
-    BASE_DIR: Path = PROJECT_DIR.joinpath("src")
-    MODULES_DIR: Path = BASE_DIR.joinpath("modules")
+    model_config = SettingsConfigDict(env_file=DOTENV, extra="ignore")
 
     # DATABASE SETTINGS
-    DB_HOST: str = os.getenv("DB_HOST", "localhost")
-    DB_PORT: int = int(os.getenv("DB_PORT", 5432))
-    DB_NAME: str = os.getenv("DB_NAME", "fitness")
-    DB_USER: str = os.getenv("DB_USER", "fitness")
-    DB_PASS: str = os.getenv("DB_PASS", "fitness")
+    DB_HOST: str = "localhost"
+    DB_PORT: int = 5432
+    DB_NAME: str
+    DB_USER: str
+    DB_PASS: str
     DB_ECHO: bool = True
 
-    db_path: str = f"{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-    sync_db_path: str = f"postgresql+psycopg2://{db_path}"
-    async_db_path: str = f"postgresql+asyncpg://{db_path}"
+    @property
+    def database_url(self) -> str:
+        return f"{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+
+    @property
+    def sync_db_path(self) -> str:
+        return f"postgresql+psycopg2://{self.database_url}"
+
+    @property
+    def async_db_path(self) -> str:
+        return f"postgresql+asyncpg://{self.database_url}"
 
     # PROJECT SETTINGS
     DEBUG: bool = True  # change on production
-    project_name: str = "Fitness App"
+    PROJECT_NAME: str = "Fitness App"
 
     # SECURE SETTINGS
     SECRET_KEY: str = os.getenv(
