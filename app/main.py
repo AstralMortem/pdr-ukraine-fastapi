@@ -1,6 +1,9 @@
 import logging
 import sys
-from fastapi import FastAPI
+from typing import Annotated
+from fastapi import Depends, FastAPI
+
+from .utils.repositories import SQLAlchemyRepository
 from .config import settings
 from .routers import routers_list
 

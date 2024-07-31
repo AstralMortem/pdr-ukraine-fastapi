@@ -1,8 +1,12 @@
-from fastapi import APIRouter
+from typing import Annotated
+from fastapi import APIRouter, Depends
+
+from ..utils.repositories import SQLAlchemyRepository
 from ..services.auth import fastapi_users, auth_backend
 from ..schemas.auth import UserCreate, UserRead, UserUpdate
 from ..config import settings
 from ..utils.oauth import google_oauth_client
+
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 

@@ -1,9 +1,24 @@
 from enum import Enum
 
 
-DriverLicense = Enum(
-    "DriverLicense",
-    ["A", "A1", "BE", "B", "B1", "CE", "C", "C1", "C1E", "DE", "D", "D1", "D1E", "T"],
-)
+class DriverLicense(Enum):
+    A = "A"
+    A1 = "A1"
+    BE = "BE"
+    B = "B"
+    B1 = "B1"
+    CE = "CE"
+    C = "C"
+    C1 = "C1"
+    C1E = "C1E"
+    DE = "DE"
+    D = "D"
+    D1 = "D1"
+    D1E = "D1E"
+    T = "T"
 
-Language = Enum("Language", ["uk", "ru", "en"])
+
+class Language(Enum):
+    uk = "uk"
+    ru = "ru"
+    en = "en"
